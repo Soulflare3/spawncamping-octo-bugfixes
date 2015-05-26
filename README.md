@@ -12,7 +12,7 @@ Temporary docs:
 >Test script to get dropbox sync working (I wanted a backup in case something went wrong, so I don't run directly from dropbox)
 
 **\server\launcher\startwillie.sh**
->Logic script to manage the bot easily
+>Willie bot launch command with args
 
 **\server\launcher\willie.sh**
->Willie bot launch command with args
+>Logic script to manage the bot easily
