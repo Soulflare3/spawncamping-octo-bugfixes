@@ -8,11 +8,14 @@ There are probably better ways to do everything in this repository...
 
 Temporary docs:
 -------------
-**\server\launcher\test.sh**
+**/client/linux/arch/setup.sh**
+>WIP setup script for Arch Linux 64-bit. Specifically for my W520, but I'll try to make it somewhat usable for others.
+
+**/server/launcher/test.sh**
 >Test script to get dropbox sync working (I wanted a backup in case something went wrong, so I don't run directly from dropbox)
 
-**\server\launcher\startwillie.sh**
+**/server/launcher/startwillie.sh**
 >Willie bot launch command with args
 
-**\server\launcher\willie.sh**
+**/server/launcher/willie.sh**
 >Logic script to manage the bot easily
