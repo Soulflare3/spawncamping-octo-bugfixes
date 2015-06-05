@@ -10,23 +10,23 @@ fi
 if [ "$SUDO_USER" != "root" ]; then
 	homedir="home/$SUDO_USER"	 #We need the user's home directory, because this script needs to be run as SUDO/ROOT
 else
-	homedir="$HOME"			 #if user is actually root, use /root
+	homedir="$HOME"			 #if $HOME is actually correct (user is root)
 fi
 
 dl="Downloads"
 irssiRepo="http://scripts.irssi.org/scripts"
 irssiScripts=( "scriptassist" "url_log" "apm" "bandwidth" "crapbuster"  ) #script name without .pl extension (assumes all .pl files)
 scriptName="Soul's Setup Script for Arch Linux"
-UseNanoAsDefault=false 		#If both are false, no changes will be made to EDITOR
-UseViAsDefault=false		#If both are false, no changes will be made to EDITOR
+UseNanoAsDefault=false 			#If both are false, no changes will be made to EDITOR
+UseViAsDefault=false			#If both are false, no changes will be made to EDITOR
 
 #git info (only used if .gitconfig does not already exist)
-email=""	#Email for git contributions
-name=""		#Name for git contributions 
-
+gitEmail=""			#Email for git contributions
+gitName=""			#Name for git contributions 
+gitPush=""			#Push setting for git contributions (matching | simple | current)
 ############ END VARS ############
-#TODO: Make script die if variables aren't edited first?
-#TODO: Consolidate pacman commands
+					#TODO: Make script die if variables aren't edited first?
+					#TODO: Consolidate pacman commands
 
 if ( "$UseNanoAsDefault" && "$UseViAsDefault" ); then
 	echo "You can't have 2 default Editors! Edit setup.sh"
@@ -36,39 +36,48 @@ fi
 echo "$scriptName"
 cd "/$homedir"
 
-#Setup Nano
-echo "set const" > .nanorc
-echo "set mouse" >> .nanorc
-echo "unset nonewlines" >> .nanorc
-echo "set nowrap" >> .nanorc
-echo "set morespace" >> .nanorc
-echo "set smooth" >> .nanorc
-echo "unset tabstospaces" >> .nanorc
-echo "set softwrap" >> .nanorc
-echo "set backup" >> .nanorc
-echo "set locking" >> .nanorc
-echo "set wordbounds" >> .nanorc
-echo ".nanorc created"
-
 if ( "$UseNanoAsDefault" ); then
 	export EDITOR=nano
+	#Setup Nano (~/.nanorc)
+	#Some of this is redundant, but we don't check global .nanorc, so we set/unset anyway
+	#Sets/unsets that are redundant won't hurt anything, unless you have REALLY tight disk space.
+	#In that case, why are you running this script?
+	#I don't set colors because in cool-retro-term, colors don't matter (all of them are ignored/overwritten)
+	echo "set const" > .nanorc
+	echo "set mouse" >> .nanorc
+	echo "unset nonewlines" >> .nanorc
+	echo "set nowrap" >> .nanorc
+	echo "set morespace" >> .nanorc
+	echo "set smooth" >> .nanorc
+	echo "unset tabstospaces" >> .nanorc
+	echo "unset softwrap" >> .nanorc
+	echo "set backup" >> .nanorc
+	echo "set locking" >> .nanorc
+	echo "set wordbounds" >> .nanorc
+	echo ".nanorc created"
 	echo "Default editor set to Nano"
 fi
 
 if ( "$UseViAsDefault" ); then
 	export EDITOR=vi
 	echo "Default editor set to vi"
+	#TODO: Setup VIM (~/.vimrc)
+	#HA that would reqire me to actully use vim 
+	echo "No .vimrc defaults defined, ignoring"
 fi
 
 
 #Setup Git Config
 if [ ! -f ".gitconfig" ]; then						#if no .gitconfig found
 	echo "[user]" > .gitconfig					#Create new .gitconfig
-	echo "email = $email" >> .gitconfig 				#user.email
-	echo "name = $name" >> .gitconfig 				#user.name
+	echo "email = $gitEmail" >> .gitconfig 				#user.email
+	echo "name = $gitName" >> .gitconfig 				#user.name
+	echo "[push]" >> .gitconfig
+	echo "default = $gitPush" >> .gitconfig
 	echo ".gitconfig created"
 fi
 
+#TODO: Maybe don't do this EVERY time?
 #Setup Clean DNS Resolver
 sudo chattr -i /etc/resolv.conf 					#make sure we can edit the file
 sudo echo "#Created by $scriptName" > /etc/resolv.conf 			#Overwrite
@@ -84,8 +93,13 @@ cd "/$homedir/$dl"
 
 #essentials
 sudo curl -sL https://asciinema.org/install | sh
-#sudo pacman --noconfirm -S steam xchat python2
-sudo pacman --noconfirm -S libg15 git hub wget pastebinit cool-retro-term irssi chromium gedit
+sudo pacman --noconfirm -Sy
+
+sudo pacman --noconfirm --needed -S  wget
+sudo wget -O "/etc/pacman.conf" "https://raw.githubusercontent.com/Soulflare3/spawncamping-octo-bugfixes/master/client/linux/arch/pacman.conf" 
+#sudo pacman --noconfirm --needed -S steam
+sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit wine 
+sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl 
 
 #Set Chromium as default Browser
 cd "/$homedir/.local/share/applications"
