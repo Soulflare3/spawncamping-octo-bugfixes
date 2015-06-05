@@ -87,10 +87,15 @@ sudo curl -sL https://asciinema.org/install | sh
 #sudo pacman --noconfirm -S steam xchat python2
 sudo pacman --noconfirm -S libg15 git hub wget pastebinit cool-retro-term irssi chromium gedit
 
-#Set Chromium as default
+#Set Chromium as default Browser
 cd "/$homedir/.local/share/applications"
-echo "x-scheme-handler/http=chromium.desktop" > mimeapps.list
+echo "[Default Applications]" > mimeapps.list
 echo "text/html=chromium.desktop" >> mimeapps.list
+echo "x-scheme-handler/http=chromium.desktop" >> mimeapps.list
+echo "x-scheme-handler/https=chromium.desktop" >> mimeapps.list
+echo "x-scheme-handler/about=chromium.desktop" >> mimeapps.list
+echo "x-scheme-handler/unknown=chromium.desktop" >> mimeapps.list
+
 
 ############ IRSSI SCRIPTS ############
 
