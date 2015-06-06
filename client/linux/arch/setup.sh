@@ -16,7 +16,7 @@ fi
 dl="Downloads"
 irssiRepo="http://scripts.irssi.org/scripts"
 irssiScripts=( "scriptassist" "url_log" "apm" "bandwidth" "crapbuster"  ) #script name without .pl extension (assumes all .pl files)
-yaourtInstall=( "foxitreader" "copyq" "copyq-plugin-itemweb" ) #packages for yaourt to install, since it can't handle more than one at a time
+yaourtInstall=( "foxitreader" "copyq" "copyq-plugin-itemweb" "maxthon-browser" "vivaldi" ) #packages for yaourt to install, since it can't handle more than one at a time
 scriptName="Soul's Setup Script for Arch Linux"
 UseNanoAsDefault=false 			#If both are false, no changes will be made to EDITOR
 UseViAsDefault=false			#If both are false, no changes will be made to EDITOR
@@ -85,6 +85,16 @@ if [ ! -f ".yaourtrc" ]; then
 	#NOENTER=1
 fi
 
+#set automatic yaourt
+if [ ! -f "$HOME/.yaourtrc" ]; then
+	echo "NOCONFIRM=1" > "$HOME/.yaourtrc"
+	echo "BUILD_NOCONFIRM=1" >> "$HOME/.yaourtrc"
+	echo "EDITFILES=0" >> "$HOME/.yaourtrc"
+	#UP_NOCONFIRM=0     # No prompt while build upgrades (including -Sbu)
+	#PU_NOCONFIRM=0     # Add --noconfirm to $PACMAN -U
+	#NOENTER=1
+fi
+
 
 #Setup Git Config
 if [ ! -f ".gitconfig" ]; then						#if no .gitconfig found
@@ -117,7 +127,10 @@ sudo pacman --noconfirm -Sy
 #sudo pacman --noconfirm --needed -S steam multilib-devel ttf-liberation lib32-alsa-plugins lib32-nvidia-utils
 sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit yaourt
 sudo pacman --noconfirm --needed -S wine playonlinux webkitgtk2 mirage python2-numpy curl yajl rsync customizepkg aurvote
-sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl htop lsof strace cmake extra-cmake-modules expac
+sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm lib32-gtk2 gtk2-perl htop lsof strace cmake extra-cmake-modules expac
+sudo yaourt -Syu
+
+sudo su "$SUDO_USER" -c "yaourt -Sy apacman"
 
 #awk 'NF>=2' <(expac "%n %O") > optdeps #Command that lets you see optional dependencies for packages on your system.
 					#output is written to ./optdeps http://unix.stackexchange.com/a/53092
@@ -127,7 +140,12 @@ sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl hto
 
 for i in "${yaourtInstall[@]}"
 do
-	su "$SUDO_USER" -c "yaourt --noconfirm --needed -Sy $i"
+	#command -v "$i" >/dev/null 2>&1 || {
+	#echo >&2 "I require foo but it's not installed.";
+	#sudo yaourt -Sy "$i"
+	#sudo su "$SUDO_USER" -c "yaourt -Sy $i"
+	#}
+	sudo apacman --noconfirm --needed --progress -S "$i"
 done
 
 
