@@ -26,7 +26,7 @@ gitEmail=""			#Email for git contributions
 gitName=""			#Name for git contributions 
 gitPush=""			#Push setting for git contributions (matching | simple | current)
 cleanResolver=false		#Should we clean the resolv.conf file? false=leave alone, true=write fresh (OpenDNS, then GoogleDNS)
-firstRun=true			#change to false when ready for script to run
+firstRun=false			#change to false when ready for script to run
 ############ END VARS ############
 					#TODO: Make script die if variables aren't edited first?
 					#TODO: Consolidate pacman commands
@@ -105,7 +105,7 @@ sudo pacman --noconfirm -Sy
 sudo pacman --noconfirm --needed -S  wget
 sudo wget -O "/etc/pacman.conf" "https://raw.githubusercontent.com/Soulflare3/spawncamping-octo-bugfixes/master/client/linux/arch/pacman.conf" 
 #sudo pacman --noconfirm --needed -S steam multilib-devel ttf-liberation lib32-alsa-plugins lib32-nvidia-utils
-sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit
+sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit yaourt
 sudo pacman --noconfirm --needed -S wine playonlinux webkitgtk2 mirage python2-numpy curl yajl
 sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl htop lsof strace cmake extra-cmake-modules expac
 #awk 'NF>=2' <(expac "%n %O") > optdeps #Command that lets you see optional dependencies for packages on your system.
@@ -115,29 +115,29 @@ sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl hto
 
 
 #YAOURT
-cd "/$homedir/Documents"
-
-if [ ! -d "package-query" ]; then
-	git clone "https://github.com/archlinuxfr/package-query.git"
-fi
-if [ -d "package-query" ]; then
-	cd "package-query"
-	sudo sh autogen.sh
-	sudo sh ./configure --prefix=
-	sudo make
-	sudo make install
-	echo "package-query installed"
-fi
-cd "/$homedir/Documents"
-if [ ! -d "yaourt" ]; then
-	git clone "https://github.com/archlinuxfr/yaourt.git"
-fi
-if [ -d "yaourt" ]; then
-	cd "yaourt/src"
-	sudo make
-	sudo make install
-	echo "yaourt installed"
-fi
+#cd "/$homedir/Documents"
+#
+#if [ ! -d "package-query" ]; then
+#	git clone "https://github.com/archlinuxfr/package-query.git"
+#fi
+#if [ -d "package-query" ]; then
+#	cd "package-query"
+#	sudo sh autogen.sh
+#	sudo sh ./configure --prefix=
+#	sudo make
+#	sudo make install
+#	echo "package-query installed"
+#fi
+#cd "/$homedir/Documents"
+#if [ ! -d "yaourt" ]; then
+#	git clone "https://github.com/archlinuxfr/yaourt.git"
+#fi
+#if [ -d "yaourt" ]; then
+#	cd "yaourt/src"
+#	sudo make
+#	sudo make install
+#	echo "yaourt installed"
+#fi
 
 #Set Chromium as default Browser
 cd "/$homedir/.local/share/applications"
