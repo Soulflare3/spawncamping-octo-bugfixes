@@ -16,6 +16,7 @@ fi
 dl="Downloads"
 irssiRepo="http://scripts.irssi.org/scripts"
 irssiScripts=( "scriptassist" "url_log" "apm" "bandwidth" "crapbuster"  ) #script name without .pl extension (assumes all .pl files)
+yaourtInstall=( "foxitreader" "copyq" "copyq-plugin-itemweb" ) #packages for yaourt to install, since it can't handle more than one at a time
 scriptName="Soul's Setup Script for Arch Linux"
 UseNanoAsDefault=false 			#If both are false, no changes will be made to EDITOR
 UseViAsDefault=false			#If both are false, no changes will be made to EDITOR
@@ -26,7 +27,7 @@ gitEmail=""			#Email for git contributions
 gitName=""			#Name for git contributions 
 gitPush=""			#Push setting for git contributions (matching | simple | current)
 cleanResolver=false		#Should we clean the resolv.conf file? false=leave alone, true=write fresh (OpenDNS, then GoogleDNS)
-firstRun=true			#change to false when ready for script to run
+firstRun=false			#change to false when ready for script to run
 ############ END VARS ############
 					#TODO: Make script die if variables aren't edited first?
 					#TODO: Consolidate pacman commands
@@ -123,7 +124,12 @@ sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl hto
 
 #get wget syntax for miblo (only download if newer)
 #clipboard manager http://hluk.github.io/CopyQ/ ditto replacement?
-su "$SUDO_USER" -c "yaourt --noconfirm --needed -S foxitreader copyq copyq-plugin-itemweb"
+
+for i in "${yaourtInstall[@]}"
+do
+	su "$SUDO_USER" -c "yaourt --noconfirm --needed -Sy $i"
+done
+
 
 #Set Chromium as default Browser
 cd "/$homedir/.local/share/applications"
