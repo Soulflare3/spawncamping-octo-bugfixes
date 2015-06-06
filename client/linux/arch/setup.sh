@@ -21,13 +21,18 @@ UseNanoAsDefault=false 			#If both are false, no changes will be made to EDITOR
 UseViAsDefault=false			#If both are false, no changes will be made to EDITOR
 
 #git info (only used if .gitconfig does not already exist)
+#probably not good to leave blank if firstrun
 gitEmail=""			#Email for git contributions
 gitName=""			#Name for git contributions 
 gitPush=""			#Push setting for git contributions (matching | simple | current)
+firstRun=false			#change to false when ready for script to run
 ############ END VARS ############
 					#TODO: Make script die if variables aren't edited first?
 					#TODO: Consolidate pacman commands
-
+if ( "$firstRun" ); then
+	echo "Please edit this script's variables before running the first time"
+	exit 1
+fi
 if ( "$UseNanoAsDefault" && "$UseViAsDefault" ); then
 	echo "You can't have 2 default Editors! Edit setup.sh"
 	exit 1
@@ -38,6 +43,7 @@ cd "/$homedir"
 
 if ( "$UseNanoAsDefault" ); then
 	export EDITOR=nano
+	export VISUAL=nano
 	#Setup Nano (~/.nanorc)
 	#Some of this is redundant, but we don't check global .nanorc, so we set/unset anyway
 	#Sets/unsets that are redundant won't hurt anything, unless you have REALLY tight disk space.
@@ -60,6 +66,7 @@ fi
 
 if ( "$UseViAsDefault" ); then
 	export EDITOR=vi
+	export VISUAL=vi
 	echo "Default editor set to vi"
 	#TODO: Setup VIM (~/.vimrc)
 	#HA that would reqire me to actully use vim 
@@ -94,12 +101,24 @@ cd "/$homedir/$dl"
 #essentials
 sudo curl -sL https://asciinema.org/install | sh
 sudo pacman --noconfirm -Sy
-
 sudo pacman --noconfirm --needed -S  wget
 sudo wget -O "/etc/pacman.conf" "https://raw.githubusercontent.com/Soulflare3/spawncamping-octo-bugfixes/master/client/linux/arch/pacman.conf" 
-#sudo pacman --noconfirm --needed -S steam
+#sudo pacman --noconfirm --needed -S steam multilib-devel ttf-liberation lib32-alsa-plugins lib32-nvidia-utils
 sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit wine 
-sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl 
+sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl htop lsof strace cmake extra-cmake-modules expac
+#awk 'NF>=2' <(expac "%n %O") > optdeps #Command that lets you see optional dependencies for packages on your system.
+					#output is written to ./optdeps http://unix.stackexchange.com/a/53092
+#YAOURT
+cd "/$homedir/Documents"
+if [ ! -d "yaourt" ]; then
+	git clone "https://github.com/archlinuxfr/yaourt.git"
+fi
+if [ -d "yaourt" ]; then
+	cd "yaourt/src"
+	sudo make
+	sudo make install
+	echo "yaourt installed"
+fi
 
 #Set Chromium as default Browser
 cd "/$homedir/.local/share/applications"
@@ -109,7 +128,6 @@ echo "x-scheme-handler/http=chromium.desktop" >> mimeapps.list
 echo "x-scheme-handler/https=chromium.desktop" >> mimeapps.list
 echo "x-scheme-handler/about=chromium.desktop" >> mimeapps.list
 echo "x-scheme-handler/unknown=chromium.desktop" >> mimeapps.list
-
 
 ############ IRSSI SCRIPTS ############
 

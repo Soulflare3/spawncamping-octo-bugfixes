@@ -11,6 +11,9 @@ Temporary docs:
 **/client/linux/arch/setup.sh**
 >WIP setup script for Arch Linux 64-bit. Specifically for my W520, but I'll try to make it somewhat usable for others.
 
+**/client/linux/arch/pacman.conf**
+>Custom /etc/pacman.conf file for Arch. Community & multilib enabled
+
 **/server/launcher/test.sh**
 >Test script to get dropbox sync working (I wanted a backup in case something went wrong, so I don't run directly from dropbox)
 
