@@ -79,6 +79,9 @@ if [ ! -f ".yaourtrc" ]; then
 	echo "NOCONFIRM=1" > .yaourtrc
 	echo "BUILD_NOCONFIRM=1" >> .yaourtrc
 	echo "EDITFILES=0" >> .yaourtrc
+	#UP_NOCONFIRM=0     # No prompt while build upgrades (including -Sbu)
+	#PU_NOCONFIRM=0     # Add --noconfirm to $PACMAN -U
+	#NOENTER=1
 fi
 
 
@@ -103,8 +106,6 @@ if ( "$cleanResolver" ); then
 fi
 #TODO: ls -l
 
-cd "/$homedir/$dl"
-#pwd
 
 #essentials
 sudo curl -sL https://asciinema.org/install | sh
@@ -116,10 +117,13 @@ sudo pacman --noconfirm -Sy
 sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit yaourt
 sudo pacman --noconfirm --needed -S wine playonlinux webkitgtk2 mirage python2-numpy curl yajl rsync customizepkg aurvote
 sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl htop lsof strace cmake extra-cmake-modules expac
+
 #awk 'NF>=2' <(expac "%n %O") > optdeps #Command that lets you see optional dependencies for packages on your system.
 					#output is written to ./optdeps http://unix.stackexchange.com/a/53092
+
 #get wget syntax for miblo (only download if newer)
 #clipboard manager http://hluk.github.io/CopyQ/ ditto replacement?
+su "$SUDO_USER" -c "yaourt --noconfirm --needed -S foxitreader copyq copyq-plugin-itemweb"
 
 #Set Chromium as default Browser
 cd "/$homedir/.local/share/applications"
