@@ -74,6 +74,13 @@ if ( "$UseViAsDefault" ); then
 	echo "No .vimrc defaults defined, ignoring"
 fi
 
+#set automatic yaourt
+if [ ! -f ".yaourtrc" ]; then
+	echo "NOCONFIRM=1" > .yaourtrc
+	echo "BUILD_NOCONFIRM=1" >> .yaourtrc
+	echo "EDITFILES=0" >> .yaourtrc
+fi
+
 
 #Setup Git Config
 if [ ! -f ".gitconfig" ]; then						#if no .gitconfig found
@@ -113,32 +120,6 @@ sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl hto
 					#output is written to ./optdeps http://unix.stackexchange.com/a/53092
 #get wget syntax for miblo (only download if newer)
 #clipboard manager http://hluk.github.io/CopyQ/ ditto replacement?
-
-
-#YAOURT
-#cd "/$homedir/Documents"
-#
-#if [ ! -d "package-query" ]; then
-#	git clone "https://github.com/archlinuxfr/package-query.git"
-#fi
-#if [ -d "package-query" ]; then
-#	cd "package-query"
-#	sudo sh autogen.sh
-#	sudo sh ./configure --prefix=
-#	sudo make
-#	sudo make install
-#	echo "package-query installed"
-#fi
-#cd "/$homedir/Documents"
-#if [ ! -d "yaourt" ]; then
-#	git clone "https://github.com/archlinuxfr/yaourt.git"
-#fi
-#if [ -d "yaourt" ]; then
-#	cd "yaourt/src"
-#	sudo make
-#	sudo make install
-#	echo "yaourt installed"
-#fi
 
 #Set Chromium as default Browser
 cd "/$homedir/.local/share/applications"
