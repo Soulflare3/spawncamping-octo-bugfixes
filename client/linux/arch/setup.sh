@@ -25,6 +25,7 @@ UseViAsDefault=false			#If both are false, no changes will be made to EDITOR
 gitEmail=""			#Email for git contributions
 gitName=""			#Name for git contributions 
 gitPush=""			#Push setting for git contributions (matching | simple | current)
+cleanResolver=false		#Should we clean the resolv.conf file? false=leave alone, true=write fresh (OpenDNS, then GoogleDNS)
 firstRun=true			#change to false when ready for script to run
 ############ END VARS ############
 					#TODO: Make script die if variables aren't edited first?
@@ -48,7 +49,7 @@ if ( "$UseNanoAsDefault" ); then
 	#Some of this is redundant, but we don't check global .nanorc, so we set/unset anyway
 	#Sets/unsets that are redundant won't hurt anything, unless you have REALLY tight disk space.
 	#In that case, why are you running this script?
-	#I don't set colors because in cool-retro-term, colors don't matter (all of them are ignored/overwritten)
+	#I don't set colors because in cool-retro-term, colors don't matter as much (they're dulled out)
 	echo "set const" > .nanorc
 	echo "set mouse" >> .nanorc
 	echo "unset nonewlines" >> .nanorc
@@ -84,15 +85,15 @@ if [ ! -f ".gitconfig" ]; then						#if no .gitconfig found
 	echo ".gitconfig created"
 fi
 
-#TODO: Maybe don't do this EVERY time?
 #Setup Clean DNS Resolver
-sudo chattr -i /etc/resolv.conf 					#make sure we can edit the file
-sudo echo "#Created by $scriptName" > /etc/resolv.conf 			#Overwrite
-sudo echo "nameserver 208.67.220.220 #OpenDNS1" >> /etc/resolv.conf	#append
-sudo echo "nameserver 208.67.222.222 #OpenDNS2" >> /etc/resolv.conf	#append
-sudo echo "nameserver 8.8.8.8 #GoogleDNS1" >> /etc/resolv.conf 		#append	
-sudo chattr +i /etc/resolv.conf 					#make sure the file won't be edited
-
+if ( "$cleanResolver" ); then
+	sudo chattr -i /etc/resolv.conf 					#make sure we can edit the file
+	sudo echo "#Created by $scriptName" > /etc/resolv.conf 			#Overwrite
+	sudo echo "nameserver 208.67.220.220 #OpenDNS1" >> /etc/resolv.conf	#append
+	sudo echo "nameserver 208.67.222.222 #OpenDNS2" >> /etc/resolv.conf	#append
+	sudo echo "nameserver 8.8.8.8 #GoogleDNS1" >> /etc/resolv.conf 		#append	
+	sudo chattr +i /etc/resolv.conf 					#make sure the file won't be edited
+fi
 #TODO: ls -l
 
 cd "/$homedir/$dl"
@@ -104,11 +105,29 @@ sudo pacman --noconfirm -Sy
 sudo pacman --noconfirm --needed -S  wget
 sudo wget -O "/etc/pacman.conf" "https://raw.githubusercontent.com/Soulflare3/spawncamping-octo-bugfixes/master/client/linux/arch/pacman.conf" 
 #sudo pacman --noconfirm --needed -S steam multilib-devel ttf-liberation lib32-alsa-plugins lib32-nvidia-utils
-sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit wine 
+sudo pacman --noconfirm --needed -S libg15 git hub openssh pastebinit cool-retro-term irssi xchat python2 teamspeak3 chromium gedit
+sudo pacman --noconfirm --needed -S wine playonlinux webkitgtk2 mirage python2-numpy curl yajl
 sudo pacman --noconfirm --needed -S weechat lua ruby nodejs tk npm gtk2-perl htop lsof strace cmake extra-cmake-modules expac
 #awk 'NF>=2' <(expac "%n %O") > optdeps #Command that lets you see optional dependencies for packages on your system.
 					#output is written to ./optdeps http://unix.stackexchange.com/a/53092
+#get wget syntax for miblo (only download if newer)
+#clipboard manager http://hluk.github.io/CopyQ/ ditto replacement?
+
+
 #YAOURT
+cd "/$homedir/Documents"
+
+if [ ! -d "package-query" ]; then
+	git clone "https://github.com/archlinuxfr/package-query.git"
+fi
+if [ -d "package-query" ]; then
+	cd "package-query"
+	sudo sh autogen.sh
+	sudo sh ./configure --prefix=
+	sudo make
+	sudo make install
+	echo "package-query installed"
+fi
 cd "/$homedir/Documents"
 if [ ! -d "yaourt" ]; then
 	git clone "https://github.com/archlinuxfr/yaourt.git"
@@ -160,7 +179,7 @@ done
 ########### Continue Setups ############
 
 cd "/$homedir/$dl"
-
+#Using the Fallout4 prerelease background
 if [ ! -f "T5JI8or.jpg" ]; then #Check if the file's already been downloaded, in case the script has already been run once
 	wget http://i.imgur.com/T5JI8or.jpg
 fi
