@@ -1,7 +1,5 @@
+--- 
 language: bash
-
+notifications: 
+  email: false
 sudo: required
-
-notifications:
-	email: false
-	
