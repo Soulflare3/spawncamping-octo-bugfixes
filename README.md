@@ -8,6 +8,9 @@ There are probably better ways to do everything in this repository...
 
 Temporary docs:
 -------------
+**/client/windows/plugins/xchat**
+>Livestreamer bridge for He/xChat 2 written in Python
+
 **/client/linux/arch/setup.sh**
 >WIP setup script for Arch Linux 64-bit. Specifically for my W520, but I'll try to make it somewhat usable for others.
 
