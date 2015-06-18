@@ -27,7 +27,7 @@ gitEmail=""			#Email for git contributions
 gitName=""			#Name for git contributions 
 gitPush=""			#Push setting for git contributions (matching | simple | current)
 cleanResolver=false		#Should we clean the resolv.conf file? false=leave alone, true=write fresh (OpenDNS, then GoogleDNS)
-firstRun=false			#change to false when ready for script to run
+firstRun=true			#change to false when ready for script to run
 ############ END VARS ############
 					#TODO: Make script die if variables aren't edited first?
 					#TODO: Consolidate pacman commands
