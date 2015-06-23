@@ -8,7 +8,7 @@ There are probably better ways to do everything in this repository...
 
 Temporary docs:
 -------------
-**/client/windows/plugins/xchat**
+**/client/plugins/xchat/xstream.py**
 >Livestreamer bridge for He/xChat 2 written in Python
 
 **/client/linux/arch/setup.sh**
