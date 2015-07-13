@@ -32,12 +32,13 @@ namespace ProjectEuler
             while(current < maxVal)
             {
                     sum = old + current;
+
+                    old = current;
+                    current = sum;
                     if (current % 2 == 0)
                     {
                         total += sum;
                     }
-                    old = current;
-                    current = sum;
       
             }
             print("Total Sum: " + total);
