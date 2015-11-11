@@ -1,9 +1,9 @@
-import xchat
+import hexchat
 import platform
 
 __module_name__ = "xstream"
 __module_version__ = "0.3dev"
-__module_description__ = "Livestreamer bridge for He/xChat 2 written in Python"
+__module_description__ = "Livestreamer bridge for He/xchat 2 written in Python"
 
 quality = "best"
 defaultserver = "twitch.tv"
@@ -17,27 +17,27 @@ stopcommands = ["forcestop", "kill"]
 # TODO: Add selector functions to list proper command name instead of just /xstream every time
 
 def main(word, word_eol, userdata):
-	channel = xchat.get_info("channel")[1:]
-	if xchat.get_info("server") == "tmi.twitch.tv":
+	channel = hexchat.get_info("channel")[1:]
+	if hexchat.get_info("server") == "tmi.twitch.tv":
 		server = "twitch.tv"
 	else:
 		server = defaultserver
 	if len(word) == 1:
 		connect(channel, quality, server)
 	elif word[1] == "raw" and len(word) >= 3:
-		xchat.command("exec livestreamer {0}".format(word_eol[2]))
+		hexchat.command("exec livestreamer {0}".format(word_eol[2]))
 	elif word[1] == "help" and len(word) >= 2:
 			xstreamHelp(word, word_eol)
 	elif any(word[1] == stopcmd for stopcmd in stopcommands) and len(word) == 2:
 		if platform.system() == "Windows":
-			xchat.command("exec taskkill /im livestreamer.exe /f")
+			hexchat.command("exec taskkill /im livestreamer.exe /f")
 		elif platform.system() == "Linux":
-			xchat.command("exec pkill livestreamer")
+			hexchat.command("exec pkill livestreamer")
 		else:
 			print("Sorry, I don't recognize your operating system")
 	elif len(word) == 2:
 		if word[1] == "stop":
-			xchat.command("execkill")
+			hexchat.command("execkill")
 		elif word[1] == "raw":
 			print("syntax: /xstream raw <command>")
 		else:
@@ -48,10 +48,10 @@ def main(word, word_eol, userdata):
 		connect(word[1], word[2], word[3])
 	else:
 		print("Usage: /xstream (<channel>) (<quality>) (<server>)")
-	return xchat.EAT_ALL
+	return hexchat.EAT_ALL
 
 def connect(channel, quality, server):
-	xchat.command("exec livestreamer --loglevel info {0}/{1} {2}".format(server, channel, quality))
+	hexchat.command("exec livestreamer --loglevel info {0}/{1} {2}".format(server, channel, quality))
 
 def xstreamHelp(word, word_eol):
 	moreInfoLines = []
@@ -80,14 +80,14 @@ def xstreamHelp(word, word_eol):
 			print("{0}".format(nextLine))
 	if not haveTopic and len(word) >= 3:
 		print("Sorry, I don't have any help topics for {0}".format(word_eol[2]))
-	return xchat.EAT_ALL
+	return hexchat.EAT_ALL
 
 def unload_xstream(userdata):
 	print("{0} unloaded".format(__module_name__))
 
-xchat.hook_unload(unload_xstream)
-xchat.hook_command("xstream", main, help="Usage: /xstream (<channel>) (<quality>) (<server>)")
-xchat.hook_command("livestreamer", main, help="Usage: /livestreamer (<channel>) (<quality>) (<server>)")
-xchat.hook_command("xs", main, help="Usage: /xs (<channel>) (<quality>) (<server>)")
+hexchat.hook_unload(unload_xstream)
+hexchat.hook_command("xstream", main, help="Usage: /xstream (<channel>) (<quality>) (<server>)")
+hexchat.hook_command("livestreamer", main, help="Usage: /livestreamer (<channel>) (<quality>) (<server>)")
+hexchat.hook_command("xs", main, help="Usage: /xs (<channel>) (<quality>) (<server>)")
 
 print("{0} {1} loaded".format(__module_name__, __module_version__))
